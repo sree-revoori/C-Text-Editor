@@ -195,6 +195,7 @@ void abFree(struct abuf *ab) {
 void editorDrawRows(struct abuf *ab) {
   int y;
   for (y = 0; y < E.screenrows; y++) {
+   if (y >= E.numrows) {
     if (y == E.screenrows / 3) {
       char welcome[80];
       int welcomelen = snprintf(welcome, sizeof(welcome),
@@ -209,6 +210,11 @@ void editorDrawRows(struct abuf *ab) {
       abAppend(ab, welcome, welcomelen);
     } else {
       abAppend(ab, "~", 1);
+    }
+         } else {
+      int len = E.row.size;
+      if (len > E.screencols) len = E.screencols;
+      abAppend(ab, E.row.chars, len);
     }
     
     abAppend(ab, "\x1b[K", 3);
