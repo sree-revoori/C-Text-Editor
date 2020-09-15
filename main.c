@@ -4,7 +4,9 @@
 #define _BSD_SOURCE
 #define _GNU_SOURCE
 
+#include <ctype.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -283,6 +285,17 @@ void editorOpen(char *filename) {
   fclose(fp);
 }
 
+void editorSave() {
+  if (E.filename == NULL) return;
+  int len;
+  char *buf = editorRowsToString(&len);
+  int fd = open(E.filename, O_RDWR | O_CREAT, 0644);
+  ftruncate(fd, len);
+  write(fd, buf, len);
+  close(fd);
+  free(buf);
+}
+
 /*** append buffer ***/
 struct abuf {
   char *b;
@@ -470,7 +483,11 @@ void editorProcessKeypress() {
       write(STDOUT_FILENO, "\x1b[H", 3);
       exit(0);
       break;  
-    
+      
+    case CTRL_KEY('s'):
+      editorSave();
+      break;
+      
     case HOME_KEY:
       E.cx = 0;
       break;
