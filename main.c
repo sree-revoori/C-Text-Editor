@@ -703,7 +703,6 @@ void editorScroll() {
     E.coloff = E.rx - E.screencols + 1;
   }
 }
-
 void editorDrawRows(struct abuf *ab) {
   int y;
   for (y = 0; y < E.screenrows; y++) {
@@ -719,6 +718,7 @@ void editorDrawRows(struct abuf *ab) {
           abAppend(ab, "~", 1);
           padding--;
         }
+        
         while (padding--) abAppend(ab, " ", 1);
         abAppend(ab, welcome, welcomelen);
       } else {
@@ -731,14 +731,21 @@ void editorDrawRows(struct abuf *ab) {
       char *c = &E.row[filerow].render[E.coloff];
       unsigned char *hl = &E.row[filerow].hl[E.coloff];
       int current_color = -1;
+      
       int j;
       for (j = 0; j < len; j++) {
-        if (hl[j] == HL_NORMAL) {
+        if (iscntrl(c[j])) {
+          char sym = (c[j] <= 26) ? '@' + c[j] : '?';
+          abAppend(ab, "\x1b[7m", 4);
+          abAppend(ab, &sym, 1);
+          abAppend(ab, "\x1b[m", 3);
+        } else if (hl[j] == HL_NORMAL) {
           if (current_color != -1) {
             abAppend(ab, "\x1b[39m", 5);
             current_color = -1;
           }
           abAppend(ab, &c[j], 1);
+          
         } else {
           int color = editorSyntaxToColor(hl[j]);
           if (color != current_color) {
@@ -747,9 +754,11 @@ void editorDrawRows(struct abuf *ab) {
             int clen = snprintf(buf, sizeof(buf), "\x1b[%dm", color);
             abAppend(ab, buf, clen);
           }
+          
           abAppend(ab, &c[j], 1);
         }
       }
+      
       abAppend(ab, "\x1b[39m", 5);
     }
     
