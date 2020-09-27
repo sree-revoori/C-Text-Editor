@@ -6,4 +6,6 @@ This editor implements numerous functionalities common to typical text editors, 
 
   - Highlighting
   - Color comments
-  - 
+  - Indenting
+  - Copy/Paste
+  
