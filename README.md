@@ -1,6 +1,6 @@
 # C-Text-Editor
 
-This is a Text Editor written in C used to edit and compile C and C++. 
+This is a Text Editor written in C used to type, code, or write anything you want!. 
 
 This editor implements numerous functionalities common to typical text editors, along with a few novel features:
  
