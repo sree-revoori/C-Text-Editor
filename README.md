@@ -9,3 +9,5 @@ This editor implements numerous functionalities common to typical text editors, 
   - Indenting
   - Copy/Paste
   
+To run the program and see the results for yourself, download this repo as a zip and run the main.c file.
+  
