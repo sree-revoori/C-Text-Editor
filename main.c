@@ -140,7 +140,7 @@ void disableRawMode() {
 }
 
 void enableRawMode() {
-  if (tcgetattr(STDIN_FILENO, &E.orig_termios) == -1) die("tcgetattr")
+  if (tcgetattr(STDIN_FILENO, &E.orig_termios) == -1) die("tcgetattr");
   atexit(disableRawMode);
   
   struct termios raw = E.orig_termios;
@@ -458,7 +458,6 @@ void editorInsertRow(int at, char *s, size_t len) {
   
   E.row[at].idx = at;
   
-  int at = E.numrows;
   E.row[at].size = len;
   E.row[at].chars = malloc(len + 1);
   memcpy(E.row[at].chars, s, len);
@@ -1056,7 +1055,7 @@ void initEditor() {
   E.screenrows -= 2;
 }
 
-editorSetStatusMessage("HELP: Ctrl-Q = quit");
+
 
 int main(int argc, char *argv[]) {
   enableRawMode();
